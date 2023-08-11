@@ -1,43 +1,48 @@
 import React, { useState } from "react";
-import productsData from "../data/productsData";
 
 const Checkout = () => {
-  const [data, setData] = useState(productsData);
-  const [count, setCount] = useState(1);
-  const [checkoutArr, setCheckoutArr] = useState(JSON.parse(localStorage.getItem("id")) || []);
-  // const [checkoutFilter, setCheckoutFilter] = useState([]);
+  const [checkoutArr, setCheckoutArr] = useState(
+    JSON.parse(localStorage.getItem("cart")) || []
+  );
+  const [total, setTotal] = useState("");
 
-  // const checkoutArr=JSON.parse(localStorage.getItem("id")) || []
-  const checkoutFilter = data.filter((item) => checkoutArr.includes(item.id));
+  console.log(checkoutArr);
 
   function handleCount(index, operation) {
-    const updatedArray = [...checkoutFilter];
+    const updatedArray = [...checkoutArr];
     const currentItem = updatedArray[index];
-  
     if (operation === "increase") {
-      setCount((count) => count + 1);
+      const updatedQuantity = currentItem.quantity + 1;
+      updatedArray[index] = { ...currentItem, quantity: updatedQuantity };
     } else {
-      if (count > 1) {
-        setCount((count) => count - 1);
+      if (currentItem.quantity > 1) {
+        const updatedQuantity = currentItem.quantity - 1;
+        updatedArray[index] = { ...currentItem, quantity: updatedQuantity };
       }
     }
-  
-  
-    updatedArray[index] = { ...currentItem, price: currentItem.price * count };
-    console.log(updatedArray[index].price);
+
+    localStorage.setItem("cart", JSON.stringify(updatedArray));
+    setCheckoutArr(JSON.parse(localStorage.getItem("cart")));
   }
 
   function handleRemove(index) {
-    checkoutArr.splice(index,1)
-    localStorage.setItem("id",JSON.stringify(checkoutArr))
-    const updatedArray=JSON.parse(localStorage.getItem("id"))
-    setCheckoutArr(updatedArray)
-    console.log(updatedArray);
+    checkoutArr.splice(index, 1);
+    localStorage.setItem("cart", JSON.stringify(checkoutArr));
+    const updatedArray = JSON.parse(localStorage.getItem("cart"));
+    setCheckoutArr(updatedArray);
   }
 
-  const checkoutElements = checkoutFilter.map((item, index) => {
+  function handleTotal() {
+    const updatedArray = [...checkoutArr];
+    const sum = updatedArray.reduce((accumulator, currentValue) => {
+      return accumulator + currentValue.price * currentValue.quantity;
+    }, 0);
+    return sum;
+  }
+
+  const checkoutElements = checkoutArr.map((item, index) => {
     return (
-      <div key={item.id} className="checkout-box rounded bg-white p-3">
+      <div key={item.id} className="checkout-box bg-white p-3">
         <h4 className="checkbox-heading pb-3">{item.name}</h4>
         <div className="checkbox-sub-box d-flex gap-5 align-items-center">
           <img src={item.thumbnail} className="checkoutImage" />
@@ -56,7 +61,7 @@ const Checkout = () => {
                 -
               </button>
               <span className="number border border-secondary py-1 px-3">
-                {count}
+                {item.quantity}
               </span>
               <button
                 onClick={() => handleCount(index, "increase")}
@@ -67,7 +72,7 @@ const Checkout = () => {
             </div>
             <p className="total">
               <span className="dark">Total</span> :{" "}
-              <span className="total-amount">{item.price}</span>
+              <span className="total-amount">{item.price * item.quantity}</span>
             </p>
           </div>
         </div>
@@ -76,9 +81,16 @@ const Checkout = () => {
   });
 
   return (
-    <div className="checkout-container my-5 d-flex flex-column gap-3">
-      {checkoutElements}
-    </div>
+    <>
+      {checkoutArr.length == 0 ? (
+        <h1 className="text-center mt-5">Nothing in the cart :(</h1>
+      ) : (
+        <div className="checkout-container my-5 d-flex flex-column">
+          {checkoutElements}
+          <button className="border-0 py-3 text-bg-success pay">{`Proceed to Pay($ ${handleTotal()})`}</button>
+        </div>
+      )}
+    </>
   );
 };
 

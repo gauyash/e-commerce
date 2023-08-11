@@ -40,14 +40,19 @@ const Category = () => {
     }
   }, [checkbox]);
 
-  
-  const arrId= JSON.parse(localStorage.getItem("id")) || [] ;
   // Handle add to cart button
+  const addToCartArray = JSON.parse(localStorage.getItem("cart")) || [];
   function addToCart(id) {
-    arrId.push(id)
-
-    localStorage.setItem("id",JSON.stringify(arrId));
-  } 
+    addToCartArray.push({
+      ...filterData[id],
+      quantity: 1,
+    });
+    const removeDuplicates = Array.from(
+      new Set(addToCartArray.map(JSON.stringify))
+    ).map(JSON.parse);
+    console.log(removeDuplicates);
+    localStorage.setItem("cart", JSON.stringify(removeDuplicates));
+  }
 
   return (
     <div className="category-container d-flex justify-content-between my-5 gap-2">

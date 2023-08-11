@@ -4,7 +4,7 @@ const Product = ({ filterData ,addToCart }) => {
   console.log(filterData);
   return (
     <>
-      {filterData.map((productItem) => {
+      {filterData.map((productItem,index) => {
         return (
           <div key={productItem.id} className="product-box d-flex">
             <img src={productItem.thumbnail} alt="" className="productImage" />
@@ -22,7 +22,7 @@ const Product = ({ filterData ,addToCart }) => {
 
               <p className="price py-2">{`$ ${productItem.price}`}</p>
               {productItem.inStock ? (
-                <button onClick={()=>addToCart(productItem.id)} className="border-0 py-2 px-4 rounded-2 text-bg-success add-to-cart">
+                <button onClick={()=>addToCart(index)} className="border-0 py-2 px-4 rounded-2 text-bg-success add-to-cart">
                   Add to Cart
                 </button>
               ) : (
