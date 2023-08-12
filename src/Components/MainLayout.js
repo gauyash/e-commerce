@@ -2,6 +2,7 @@ import React from "react";
 import { Link, Outlet } from "react-router-dom";
 
 const MainLayout = () => {
+
   return (
     <>
     <header className="bg-white px-4 shadow-sm py-2 d-flex align-items-center justify-content-between">

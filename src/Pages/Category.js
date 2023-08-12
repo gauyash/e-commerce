@@ -6,6 +6,8 @@ import Product from "../Components/Product";
 
 const Category = () => {
   const { id } = useParams();
+  
+
   const [data, setData] = useState(
     id === "all"
       ? productsData
@@ -50,7 +52,7 @@ const Category = () => {
     const removeDuplicates = Array.from(
       new Set(addToCartArray.map(JSON.stringify))
     ).map(JSON.parse);
-    console.log(removeDuplicates);
+    console.log(removeDuplicates.length);
     localStorage.setItem("cart", JSON.stringify(removeDuplicates));
   }
 

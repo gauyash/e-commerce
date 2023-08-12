@@ -4,9 +4,7 @@ const Checkout = () => {
   const [checkoutArr, setCheckoutArr] = useState(
     JSON.parse(localStorage.getItem("cart")) || []
   );
-  const [total, setTotal] = useState("");
-
-  console.log(checkoutArr);
+ 
 
   function handleCount(index, operation) {
     const updatedArray = [...checkoutArr];
