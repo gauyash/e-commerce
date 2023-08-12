@@ -1,10 +1,8 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { useGlobalContext } from "../context";
+import categoriesData from "../data/categoriesData";
 
 const Home = () => {
-  const { categoriesData } = useGlobalContext();
-
   const categoriesElements = categoriesData.map((item) => {
     return (
       <Link key={item.id} to={`category/${item.id}`} className="category-items">

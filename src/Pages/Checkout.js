@@ -1,10 +1,11 @@
 import React, { useState } from "react";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const Checkout = () => {
   const [checkoutArr, setCheckoutArr] = useState(
     JSON.parse(localStorage.getItem("cart")) || []
   );
- 
 
   function handleCount(index, operation) {
     const updatedArray = [...checkoutArr];
@@ -13,7 +14,7 @@ const Checkout = () => {
       const updatedQuantity = currentItem.quantity + 1;
       updatedArray[index] = { ...currentItem, quantity: updatedQuantity };
     } else {
-      if (currentItem.quantity > 1) {
+      if (currentItem.quantity < 1) {
         const updatedQuantity = currentItem.quantity - 1;
         updatedArray[index] = { ...currentItem, quantity: updatedQuantity };
       }
@@ -24,9 +25,9 @@ const Checkout = () => {
   }
 
   function handleRemove(index) {
-    checkoutArr.splice(index, 1);
-    localStorage.setItem("cart", JSON.stringify(checkoutArr));
-    const updatedArray = JSON.parse(localStorage.getItem("cart"));
+    const updatedArray = [...checkoutArr];
+    updatedArray.splice(index, 1);
+    localStorage.setItem("cart", JSON.stringify(updatedArray));
     setCheckoutArr(updatedArray);
   }
 
@@ -78,14 +79,24 @@ const Checkout = () => {
     );
   });
 
+  function handlePay() {
+    toast.success(`Thanks for using the website :)`, {
+      position: toast.POSITION.TOP_CENTER,
+    });
+  }
+
   return (
     <>
+      <ToastContainer />
       {checkoutArr.length == 0 ? (
         <h1 className="text-center mt-5">Nothing in the cart :(</h1>
       ) : (
         <div className="checkout-container my-5 d-flex flex-column">
           {checkoutElements}
-          <button className="border-0 py-3 text-bg-success pay">{`Proceed to Pay($ ${handleTotal()})`}</button>
+          <button
+            onClick={handlePay}
+            className="border-0 py-3 text-bg-success pay"
+          >{`Proceed to Pay($ ${handleTotal()})`}</button>
         </div>
       )}
     </>

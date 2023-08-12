@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from "react";
 import productsData from "../data/productsData";
 import { useParams } from "react-router-dom";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import Filter from "../Components/Filter";
 import Product from "../Components/Product";
 
 const Category = () => {
   const { id } = useParams();
-  
-
   const [data, setData] = useState(
     id === "all"
       ? productsData
@@ -52,14 +52,17 @@ const Category = () => {
     const removeDuplicates = Array.from(
       new Set(addToCartArray.map(JSON.stringify))
     ).map(JSON.parse);
-    console.log(removeDuplicates.length);
     localStorage.setItem("cart", JSON.stringify(removeDuplicates));
+    toast.success(`Added ${filterData[id].name}`, {
+      position: toast.POSITION.TOP_CENTER,
+    });
   }
 
   return (
     <div className="category-container d-flex justify-content-between my-5 gap-2">
       <Filter checkbox={checkbox} handleChange={handleChange} />
       <section className="category-box bg-white rounded-1">
+        <ToastContainer />
         <Product addToCart={addToCart} filterData={filterData} />
       </section>
     </div>
