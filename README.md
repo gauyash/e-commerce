@@ -16,10 +16,10 @@ Welcome to the Ecommerce Project! This project is a simple e-commerce website bu
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/your-username/ecommerce-project.git
+   git clone https://github.com/gauyash/e-commerce.git
 2. Navigate to the project directory:
     ```bash
-    cd ecommerce-project
+    cd e-commerce
 3. Install the dependencies:
     ```bash
     npm install
