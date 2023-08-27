@@ -6,7 +6,7 @@ import "react-toastify/dist/ReactToastify.css";
 import Filter from "../Components/Filter";
 import Product from "../Components/Product";
 
-const Category = () => {
+const Category = ({addToCart}) => {
   const { id } = useParams();
   const [data, setData] = useState(
     id === "all"
@@ -42,21 +42,7 @@ const Category = () => {
     }
   }, [checkbox]);
 
-  // Handle add to cart button
-  const addToCartArray = JSON.parse(localStorage.getItem("cart")) || [];
-  function addToCart(id) {
-    addToCartArray.push({
-      ...filterData[id],
-      quantity: 1,
-    });
-    const removeDuplicates = Array.from(
-      new Set(addToCartArray.map(JSON.stringify))
-    ).map(JSON.parse);
-    localStorage.setItem("cart", JSON.stringify(removeDuplicates));
-    toast.success(`Added ${filterData[id].name}`, {
-      position: toast.POSITION.TOP_CENTER,
-    });
-  }
+  
 
   return (
     <div className="category-container d-flex justify-content-between my-5 gap-2">
